@@ -35,6 +35,11 @@ router.post('/login', async (req, res) => {
             message: 'Invalid password'
         });
     }
+
+    res.status(200).json({
+        message: 'User logged in successfully',
+        user
+    });
 })
 
 module.exports = router;
