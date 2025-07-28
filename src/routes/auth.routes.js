@@ -47,4 +47,34 @@ router.post('/login', async (req, res) => {
     });
 })
 
+router.get('/user', async (req, res) => {
+    // Get user logic here
+    const {token} = req.body;
+
+    if(!token){
+        return res.status(401).json({
+            message: 'Unauthorized access'
+        });
+    }
+    try{
+        const decoded = jwt.verify(token , process.env.JWT_SECRET)
+
+        const user = await userModel.findOne({
+            _id: decoded.id
+        }).select('-password'); // Exclude password from the response
+
+        res.status(200).json({
+            message: 'User retrieved successfully',
+            user
+        });
+    }catch (error){
+        return res.status(401).json({
+            message: 'Invalid token'
+        });
+    }
+
+
+    
+});    
+
 module.exports = router;
