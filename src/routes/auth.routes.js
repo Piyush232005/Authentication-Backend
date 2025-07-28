@@ -15,6 +15,9 @@ router.post('/register', async (req, res) => {
     const token = jwt.sign({
         id: user._id,
     },process.env.JWT_SECRET )
+    
+    res.cookie('token', token)
+
     res.status(201).json({
         message: 'User registered successfully',
         user,token
@@ -49,7 +52,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/user', async (req, res) => {
     // Get user logic here
-    const {token} = req.body;
+    const {token} = req.cookies;
 
     if(!token){
         return res.status(401).json({
